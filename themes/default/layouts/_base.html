@@ -1,0 +1,30 @@
+{{define "_base"}}<!doctype html>
+<html lang="{{.Site.Language}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{if .Title}}{{.Title}} · {{end}}{{.Site.Title}}</title>
+  {{if .Site.Description}}<meta name="description" content="{{.Site.Description}}">{{end}}
+  <link rel="alternate" type="application/rss+xml" title="{{.Site.Title}}" href="/rss.xml">
+  <link rel="stylesheet" href="/style.css">
+  {{block "head" .}}{{end}}
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-title" href="/">{{.Site.Title}}</a>
+    <nav>
+      <a href="/">home</a>
+      <a href="/tags/">tags</a>
+      <a href="/rss.xml">rss</a>
+    </nav>
+  </header>
+  <main>
+    {{block "main" .}}{{end}}
+  </main>
+  <footer class="site-footer">
+    <span>© {{year}} {{.Site.Author}}</span>
+    <span>built with ailog</span>
+  </footer>
+</body>
+</html>
+{{end}}

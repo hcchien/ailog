@@ -1,0 +1,27 @@
+{{define "post.html"}}{{template "_base" .}}{{end}}
+
+{{define "head"}}
+{{with .Post}}{{if .Description}}<meta property="og:description" content="{{.Description}}">{{end}}{{end}}
+{{end}}
+
+{{define "main"}}
+{{with .Post}}
+<article class="post">
+  <header class="post-header">
+    <h1>{{.Title}}</h1>
+    <p class="post-meta">
+      <time datetime="{{formatDate .Date}}">{{formatDate .Date}}</time>
+      {{if .Tags}}
+      · <span class="post-tags">
+        {{range .Tags}}<a href="/tags/{{.}}/">#{{.}}</a> {{end}}
+      </span>
+      {{end}}
+    </p>
+  </header>
+  <div class="post-body">
+    {{.HTML}}
+  </div>
+</article>
+<p class="back"><a href="/">← back</a></p>
+{{end}}
+{{end}}

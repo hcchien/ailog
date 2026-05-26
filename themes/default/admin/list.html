@@ -1,0 +1,22 @@
+{{define "main"}}
+<div style="display:flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
+  <h2 style="margin:0;">Posts</h2>
+  <a role="button" href="/admin/new">+ new post</a>
+</div>
+
+<ul class="post-list">
+  {{range .Posts}}
+  <li>
+    <span class="date">{{formatDate .Date}}</span>
+    <a class="title" href="/admin/edit?slug={{.Slug}}">{{if .Title}}{{.Title}}{{else}}<em>(untitled)</em>{{end}}</a>
+    {{if .Draft}}<span class="draft-pill">draft</span>{{end}}
+    <form method="post" action="/admin/delete" onsubmit="return confirm('Delete this post?');" style="margin:0;">
+      <input type="hidden" name="slug" value="{{.Slug}}">
+      <button type="submit" class="secondary outline" style="padding: 0.15rem 0.6rem; font-size: 0.75rem;">delete</button>
+    </form>
+  </li>
+  {{else}}
+  <li style="border:none; color: var(--pico-muted-color); font-style: italic;">沒有文章 — 點上面 <a href="/admin/new">+ new post</a> 開始寫。</li>
+  {{end}}
+</ul>
+{{end}}

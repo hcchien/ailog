@@ -1,0 +1,164 @@
+:root {
+  --bg: #fdfcf9;
+  --fg: #1f1f1f;
+  --muted: #6b6b6b;
+  --accent: #a14b2c;
+  --rule: #e7e3da;
+  --code-bg: #f4f1ea;
+  --max-width: 42rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161513;
+    --fg: #e9e4d8;
+    --muted: #9a9285;
+    --accent: #d59a78;
+    --rule: #2a2823;
+    --code-bg: #1f1d19;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Charter", "Iowan Old Style", "Georgia", "Source Han Serif TC",
+               "Noto Serif TC", "PingFang TC", serif;
+  font-size: 18px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+main, .site-header, .site-footer {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+}
+
+.site-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--rule);
+  padding-top: 2.5rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.site-title {
+  font-weight: 600;
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.site-header nav a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 1rem;
+  font-size: 0.9rem;
+}
+.site-header nav a:hover { color: var(--accent); }
+
+.site-description {
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  margin-top: 4rem;
+  padding-top: 1rem;
+  padding-bottom: 3rem;
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+
+h1, h2, h3, h4 {
+  font-family: "Charter", "Source Han Serif TC", "PingFang TC", serif;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+h1 { font-size: 1.9rem; margin: 1.5rem 0 0.75rem; }
+h2 { font-size: 1.35rem; margin: 2rem 0 0.5rem; }
+h3 { font-size: 1.1rem; margin: 1.5rem 0 0.4rem; }
+
+p, ul, ol, pre, blockquote { margin: 0 0 1.1rem; }
+
+/* post list */
+.post-list { list-style: none; padding: 0; }
+.post-list li { padding: 0.4rem 0; }
+.post-link {
+  display: flex; gap: 1rem; align-items: baseline;
+  text-decoration: none; color: var(--fg);
+}
+.post-link:hover .post-title { color: var(--accent); }
+.post-date {
+  font-family: "SF Mono", "JetBrains Mono", "Menlo", monospace;
+  color: var(--muted);
+  font-size: 0.85rem;
+  flex: 0 0 6.5rem;
+}
+.post-title { font-weight: 500; }
+.post-summary { color: var(--muted); margin: 0.1rem 0 0.5rem 7.5rem; font-size: 0.95rem; }
+
+/* post detail */
+.post-header { margin-bottom: 1.75rem; }
+.post-header h1 { margin-bottom: 0.25rem; }
+.post-meta { color: var(--muted); font-size: 0.9rem; }
+.post-tags a { color: var(--muted); text-decoration: none; margin-right: 0.25rem; }
+.post-tags a:hover { color: var(--accent); }
+
+.post-body img { max-width: 100%; height: auto; border-radius: 4px; }
+.post-body blockquote {
+  border-left: 3px solid var(--rule);
+  padding-left: 1rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* code */
+code {
+  font-family: "SF Mono", "JetBrains Mono", "Menlo", monospace;
+  font-size: 0.88em;
+  background: var(--code-bg);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+pre {
+  background: var(--code-bg);
+  padding: 1rem 1.1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+pre code { background: transparent; padding: 0; font-size: 1em; }
+
+/* tag cloud */
+.tag-cloud { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; }
+.tag-cloud li a { text-decoration: none; }
+.tag-count { color: var(--muted); font-size: 0.8rem; margin-left: 0.15rem; }
+
+.back { margin-top: 3rem; }
+.empty { color: var(--muted); font-style: italic; }
+
+@media (max-width: 600px) {
+  body { font-size: 16.5px; }
+  .post-link { flex-direction: column; gap: 0; }
+  .post-date { flex: none; }
+  .post-summary { margin-left: 0; }
+}

@@ -1,0 +1,103 @@
+{{define "main"}}
+<form method="post" action="/admin/save" id="editor-form">
+  <input type="hidden" name="original_slug" value="{{.Post.Slug}}">
+
+  <div class="meta-grid">
+    <label>
+      Title
+      <input type="text" name="title" value="{{.Post.Title}}" required autocomplete="off" placeholder="文章標題">
+    </label>
+    <label>
+      Slug
+      <input type="text" name="slug" value="{{.Post.Slug}}" autocomplete="off"
+             placeholder="留空會用 title 自動產生" pattern="[a-z0-9-]*">
+    </label>
+  </div>
+
+  <div class="meta-grid">
+    <label>
+      Date
+      <input type="datetime-local" name="date" value="{{.Post.Date.Format "2006-01-02T15:04"}}">
+    </label>
+    <label>
+      Tags
+      <input type="text" name="tags" id="tags-input" value="{{.TagsCSV}}" list="all-tags"
+             autocomplete="off" placeholder="用逗號分隔，如：meta, hello">
+      <datalist id="all-tags">
+        {{range .AllTags}}<option value="{{.}}">{{end}}
+      </datalist>
+    </label>
+  </div>
+
+  <label>
+    Description
+    <input type="text" name="description" value="{{.Post.Description}}" placeholder="摘要（會用在首頁列表與 RSS）">
+  </label>
+
+  <label class="draft-toggle">
+    <input type="checkbox" name="draft" {{if .Post.Draft}}checked{{end}}>
+    Draft (不會發布到正式站)
+  </label>
+
+  <div class="editor-grid">
+    <div>
+      <label for="body">Content (Markdown)</label>
+      <textarea id="body" name="body">{{.Post.Body}}</textarea>
+    </div>
+    <div>
+      <label>Preview</label>
+      <div class="preview-pane" id="preview"></div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap: 0.75rem; align-items: center; margin-top: 1.5rem;">
+    <button type="submit">Save{{if .Site.Admin.AutoPush}} & push{{end}}</button>
+    <a role="button" class="secondary" href="/admin">cancel</a>
+    {{if not .IsNew}}
+    <span style="flex:1;"></span>
+    <span style="color: var(--pico-muted-color); font-size: 0.85rem;">slug: <code>{{.Post.Slug}}</code></span>
+    {{end}}
+  </div>
+</form>
+
+<script>
+(function () {
+  const ta = document.getElementById('body');
+  const preview = document.getElementById('preview');
+
+  const easyMDE = new EasyMDE({
+    element: ta,
+    autoDownloadFontAwesome: true,
+    spellChecker: false,
+    status: ['lines', 'words'],
+    uploadImage: true,
+    imageUploadEndpoint: '/admin/upload',
+    imageAccept: 'image/png, image/jpeg, image/gif, image/webp, image/svg+xml',
+    imagePathAbsolute: true,
+    toolbar: [
+      'bold', 'italic', 'heading', '|',
+      'quote', 'unordered-list', 'ordered-list', '|',
+      'link', 'image', 'upload-image', 'code', 'table', '|',
+      'preview', 'side-by-side', 'fullscreen', '|',
+      'guide',
+    ],
+  });
+
+  let timer;
+  const renderPreview = async () => {
+    const body = easyMDE.value();
+    const res = await fetch('/admin/preview', {
+      method: 'POST',
+      body: body,
+      headers: { 'Content-Type': 'text/plain' },
+    });
+    preview.innerHTML = await res.text();
+  };
+  easyMDE.codemirror.on('change', () => {
+    clearTimeout(timer);
+    timer = setTimeout(renderPreview, 250);
+  });
+  renderPreview();
+})();
+</script>
+{{end}}

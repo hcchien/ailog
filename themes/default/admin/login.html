@@ -1,0 +1,13 @@
+{{define "main"}}
+<article style="max-width: 28rem; margin: 4rem auto;">
+  <header><strong>Sign in</strong></header>
+  <p>用 GitHub 帳號 <code>{{.Site.Admin.User}}</code> 登入。需要先在終端機跑過 <code>gh auth login</code>。</p>
+  {{if .Error}}<p class="flash error">{{.Error}}</p>{{end}}
+  <form method="post" action="/admin/login">
+    <button type="submit">Sign in with GitHub (via <code>gh</code>)</button>
+  </form>
+  <footer style="font-size: 0.85rem; color: var(--pico-muted-color);">
+    Admin server 只 bind 在 127.0.0.1，外部無法存取。
+  </footer>
+</article>
+{{end}}

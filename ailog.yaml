@@ -1,0 +1,20 @@
+title: ailog
+description: A lightweight blog
+author: hcchien
+baseURL: https://example.com
+language: zh-Hant
+
+# Custom domain for GitHub Pages (leave blank for *.github.io)
+# When set, a CNAME file is written into dist/ at build time.
+customDomain: ""
+
+# Admin server settings (used by `ailog admin`)
+admin:
+  user: hcchien        # only this GitHub username can log in
+  port: 8080           # bound to 127.0.0.1
+  postsDir: content/posts
+  uploadsDir: public/images
+  autoPush: true       # commit + push to GitHub after every save
+
+# Display
+postsPerPage: 20
