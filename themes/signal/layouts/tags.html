@@ -1,0 +1,28 @@
+{{define "head"}}{{end}}
+
+{{define "main"}}
+<div class="page">
+  <div class="container">
+    <section class="hero" style="grid-template-columns: 1fr; padding-bottom: 24px;">
+      <div class="lead">
+        <div class="tagline">~/topics · {{len .Tags}} threads</div>
+        <h1>Topics &amp; <em>threads</em>.</h1>
+        <p>Pick a thread to filter the index. Larger bars mean more entries filed under that tag.</p>
+      </div>
+    </section>
+    {{$max := 1}}
+    {{range .Tags}}{{if gt .Count $max}}{{$max = .Count}}{{end}}{{end}}
+    <div class="tags-grid">
+      {{range .Tags}}
+      <a href="{{tagURL .Name}}">
+        <div class="name">#{{.Name}}</div>
+        <div class="count">{{.Count}} {{if eq .Count 1}}post{{else}}posts{{end}}</div>
+        <div class="progress-mini"><i style="width: {{div (mul .Count 100) $max}}%;"></i></div>
+      </a>
+      {{else}}
+      <p style="color: var(--ink-soft); font-style: italic;">沒有 tag。</p>
+      {{end}}
+    </div>
+  </div>
+</div>
+{{end}}

@@ -4,6 +4,9 @@ author: hcchien
 baseURL: https://hcchien.github.io
 language: zh-Hant
 
+# Public theme: aperture
+theme: aperture
+
 # Sub-path the site is served from. Leave blank for root.
 # - GitHub Pages project site (hcchien.github.io/ailog/) → basePath: /ailog
 # - User site (hcchien.github.io/) or custom domain at root → basePath: ""

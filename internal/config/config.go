@@ -26,6 +26,7 @@ type Site struct {
 	Language     string      `yaml:"language"`
 	CustomDomain string      `yaml:"customDomain"`
 	PostsPerPage int         `yaml:"postsPerPage"`
+	Theme        string      `yaml:"theme"`
 	Admin        AdminConfig `yaml:"admin"`
 
 	Root string `yaml:"-"`
@@ -58,6 +59,9 @@ func (s *Site) applyDefaults() {
 	}
 	s.BasePath = bp
 
+	if s.Theme == "" {
+		s.Theme = "default"
+	}
 	if s.Language == "" {
 		s.Language = "zh-Hant"
 	}
@@ -101,5 +105,9 @@ func (s *Site) AbsURL(p string) string {
 func (s *Site) PostsDir() string   { return filepath.Join(s.Root, s.Admin.PostsDir) }
 func (s *Site) UploadsDir() string { return filepath.Join(s.Root, s.Admin.UploadsDir) }
 func (s *Site) PublicDir() string  { return filepath.Join(s.Root, "public") }
-func (s *Site) ThemeDir() string   { return filepath.Join(s.Root, "themes", "default") }
+func (s *Site) ThemeDir() string   { return filepath.Join(s.Root, "themes", s.Theme) }
+func (s *Site) AdminThemeDir() string {
+	// Admin UI always uses the default theme, regardless of public theme.
+	return filepath.Join(s.Root, "themes", "default")
+}
 func (s *Site) DistDir() string    { return filepath.Join(s.Root, "dist") }

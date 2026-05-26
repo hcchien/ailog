@@ -1,0 +1,33 @@
+{{define "head"}}{{end}}
+
+{{define "main"}}
+<div class="page">
+  <div class="container">
+    <section class="masthead">
+      <h1>Topics, by frequency.</h1>
+      <div class="side">
+        <div class="tagline">Threads pulled across {{len .AllPosts}} essays. Pick one to filter the index.</div>
+        <div class="meta">
+          <div>Topics<b>{{len .Tags}}</b></div>
+          <div>Posts<b>{{len .AllPosts}}</b></div>
+          <div>Largest<b>{{if .Tags}}#{{(index .Tags 0).Name}}{{else}}—{{end}}</b></div>
+        </div>
+      </div>
+    </section>
+    {{$max := 1}}
+    {{range .Tags}}{{if gt .Count $max}}{{$max = .Count}}{{end}}{{end}}
+    <ul class="tags-grid">
+      {{range $i, $t := .Tags}}
+      <li>
+        <div class="num">{{pad2 (add $i 1)}}</div>
+        <a href="{{tagURL $t.Name}}" class="name">#{{$t.Name}}</a>
+        <div class="count">{{pad2 $t.Count}} {{if eq $t.Count 1}}essay{{else}}essays{{end}}</div>
+        <div class="bar" style="--w: {{printf "%d" (div (mul $t.Count 100) $max)}}%;"></div>
+      </li>
+      {{else}}
+      <li><div></div><div style="color: var(--ink-soft); font-style: italic;">沒有 tag。</div><div></div><div></div></li>
+      {{end}}
+    </ul>
+  </div>
+</div>
+{{end}}

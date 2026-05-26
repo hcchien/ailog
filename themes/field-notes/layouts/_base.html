@@ -1,0 +1,61 @@
+{{define "_base"}}<!doctype html>
+<html lang="{{.Site.Language}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{if .Title}}{{.Title}} · {{end}}{{.Site.Title}}</title>
+  {{if .Site.Description}}<meta name="description" content="{{.Site.Description}}">{{end}}
+  <link rel="alternate" type="application/rss+xml" title="{{.Site.Title}}" href="{{url "/rss.xml"}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{url "/style.css"}}">
+  <script src="{{url "/shared.js"}}" defer></script>
+  <script src="{{url "/theme.js"}}" defer></script>
+  {{block "head" .}}{{end}}
+</head>
+<body>
+  {{if eq .Page "post"}}<div class="progress"><i></i></div>{{end}}
+  <header class="site-header">
+    <div class="inner">
+      <a href="{{url "/"}}" class="brand">{{.Site.Title}}<span class="sub">A field journal · {{.Site.Author}}</span></a>
+      <nav class="nav">
+        <a href="{{url "/"}}" class="{{if eq .Page "home"}}active{{end}}">Index</a>
+        <a href="{{url "/tags/"}}" class="{{if or (eq .Page "tags") (eq .Page "tag")}}active{{end}}">Topics</a>
+        <a href="{{url "/rss.xml"}}">RSS</a>
+        <a href="#" class="theme-toggle" title="Toggle theme" aria-label="Toggle theme"><span data-icon="moon">☾</span><span data-icon="sun" style="display:none">☀</span></a>
+      </nav>
+    </div>
+    <div class="header-meta-inner">
+      <div>
+        <span>Updated<b>{{if .AllPosts}}{{with index .AllPosts 0}}{{formatDate .Date}}{{end}}{{else}}—{{end}}</b></span>
+        <span>Posts<b>{{len .AllPosts}}</b></span>
+        <span>Topics<b>{{len .Tags}}</b></span>
+        <span>Vol.<b>03</b></span>
+      </div>
+    </div>
+  </header>
+  <main>{{block "main" .}}{{end}}</main>
+  <footer class="site-footer">
+    <div class="inner">
+      <div>
+        <div class="colophon">{{.Site.Title}}</div>
+        <div class="colcontent">{{if .Site.Description}}{{.Site.Description}}{{else}}A field journal — notes and essays.{{end}}</div>
+      </div>
+      <div>
+        <h6>Read</h6>
+        <ul><li><a href="{{url "/"}}">Index</a></li><li><a href="{{url "/tags/"}}">Topics</a></li><li><a href="{{url "/rss.xml"}}">RSS</a></li></ul>
+      </div>
+      <div>
+        <h6>Author</h6>
+        <ul><li>{{.Site.Author}}</li></ul>
+      </div>
+      <div>
+        <h6>Colophon</h6>
+        <ul><li>Built with ailog</li><li>DM Sans · IBM Plex</li><li>© {{year}}</li></ul>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
+{{end}}

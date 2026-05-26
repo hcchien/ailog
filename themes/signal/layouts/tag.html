@@ -1,0 +1,35 @@
+{{define "head"}}{{end}}
+
+{{define "main"}}
+<div class="page">
+  <div class="container">
+    <section class="hero" style="grid-template-columns: 1fr; padding-bottom: 24px;">
+      <div class="lead">
+        <div class="tagline"><a href="{{url "/tags/"}}" style="color: var(--accent);">← ~/topics</a> · {{len .Posts}} {{if eq (len .Posts) 1}}entry{{else}}entries{{end}}</div>
+        <h1>#<em>{{.Tag}}</em></h1>
+        <p>Everything filed under <code style="font-family: var(--mono); font-size: 14px; background: var(--accent-soft); color: var(--accent); padding: 1px 6px; border-radius: 4px;">#{{.Tag}}</code>, most recent first.</p>
+      </div>
+    </section>
+    <div class="cards">
+      {{range .Posts}}
+      <article class="card">
+        <a href="{{url .URL}}"><div class="image">{{coverSVG (coverHue .) .CoverLabel}}</div></a>
+        <div class="body">
+          <div class="meta">
+            <span class="tag">#{{.FirstTag}}</span>
+            <span>·</span>
+            <span>{{relTime .Date}}</span>
+          </div>
+          <h4><a href="{{url .URL}}">{{.Title}}</a></h4>
+          {{if .Description}}<p>{{.Description}}</p>{{end}}
+          <div class="foot">
+            <span>{{.ReadingMinutes}} min read</span>
+            <span>→</span>
+          </div>
+        </div>
+      </article>
+      {{end}}
+    </div>
+  </div>
+</div>
+{{end}}

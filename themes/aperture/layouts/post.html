@@ -1,0 +1,62 @@
+{{define "head"}}
+{{with .Post}}{{if .Description}}<meta property="og:description" content="{{.Description}}">{{end}}{{end}}
+{{end}}
+
+{{define "main"}}
+{{with .Post}}
+<div class="page">
+  <div class="container">
+    <div class="post-layout">
+      <aside class="toc" data-toc>
+        <h6>In this essay</h6>
+        <ol></ol>
+      </aside>
+
+      <article>
+        <header class="article-head">
+          <div class="eyebrow">{{.FirstTag}} · Essay · {{shortDate .Date}}</div>
+          <h1>{{.Title}}</h1>
+          {{if .Description}}<p class="dek">{{.Description}}</p>{{end}}
+          <div class="meta-row">
+            <span>By {{$.Site.Author}}</span>
+            <span>{{.ReadingMinutes}} min read</span>
+            <span>{{longDate .Date}}</span>
+          </div>
+        </header>
+        <div class="post-body" data-post-body>{{.HTML}}</div>
+
+        <div class="prev-next">
+          {{if $.Prev}}
+            <a href="{{url $.Prev.URL}}" class="prev">
+              <div class="label">← Previous</div>
+              <div class="title">{{$.Prev.Title}}</div>
+            </a>
+          {{else}}<div></div>{{end}}
+          {{if $.Next}}
+            <a href="{{url $.Next.URL}}" class="next">
+              <div class="label">Next →</div>
+              <div class="title">{{$.Next.Title}}</div>
+            </a>
+          {{else}}<div></div>{{end}}
+        </div>
+      </article>
+
+      <aside class="share">
+        <div class="group">
+          <span class="lbl">Tags</span>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+            {{range .Tags}}<a class="tag-link" href="{{tagURL .}}">#{{.}}</a>{{end}}
+          </div>
+        </div>
+        <div class="group" style="margin-top: 32px;">
+          <span class="lbl">Share</span>
+          <div style="display: flex; gap: 6px; margin-top: 8px;">
+            <button class="icon-btn" type="button" data-copy-link title="Copy link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+{{end}}
+{{end}}

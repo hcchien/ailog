@@ -1,0 +1,76 @@
+{{define "head"}}
+{{with .Post}}{{if .Description}}<meta property="og:description" content="{{.Description}}">{{end}}{{end}}
+{{end}}
+
+{{define "main"}}
+{{with .Post}}
+<div class="page">
+  <div class="container">
+    <div class="post-layout">
+      <aside class="toc" data-toc>
+        <h6>Contents</h6>
+        <ol></ol>
+      </aside>
+
+      <article>
+        <header class="article-head">
+          <div class="meta-strip">
+            <span class="num">№ {{pad2 (add $.PostIndex 1)}}</span>
+            <span>{{.FirstTag}}</span>
+            <span>{{formatDate .Date}}</span>
+          </div>
+          <h1>{{.Title}}</h1>
+          {{if .Description}}<p class="dek">{{.Description}}</p>{{end}}
+          <div class="byline">
+            <span><b>By</b> {{$.Site.Author}}</span>
+            <span><b>Reading</b> {{.ReadingMinutes}} min</span>
+            <span><b>Filed</b> {{range $i, $t := .Tags}}{{if $i}} {{end}}#{{$t}}{{end}}</span>
+          </div>
+        </header>
+
+        <div class="post-body" data-post-body>{{.HTML}}</div>
+
+        <div class="prev-next">
+          {{if $.Prev}}
+            <a href="{{url $.Prev.URL}}">
+              <div class="label">← № {{pad2 $.PostIndex}} Previous</div>
+              <div class="title">{{$.Prev.Title}}</div>
+            </a>
+          {{else}}<div></div>{{end}}
+          {{if $.Next}}
+            <a href="{{url $.Next.URL}}">
+              <div class="label">№ {{pad2 (add $.PostIndex 2)}} Next →</div>
+              <div class="title">{{$.Next.Title}}</div>
+            </a>
+          {{else}}<div></div>{{end}}
+        </div>
+      </article>
+
+      <aside class="share">
+        <div class="block">
+          <h6>Filed under</h6>
+          <div class="val">{{.FirstTag}}</div>
+          <div class="links" style="margin-top: 10px;">
+            {{range .Tags}}<a href="{{tagURL .}}">#{{.}}</a>{{end}}
+          </div>
+        </div>
+        <div class="block">
+          <h6>Published</h6>
+          <div class="val">{{formatDate .Date}}</div>
+        </div>
+        <div class="block">
+          <h6>Reading time</h6>
+          <div class="val">{{.ReadingMinutes}} min</div>
+        </div>
+        <div class="block">
+          <h6>Share</h6>
+          <div class="links">
+            <a href="#" data-copy-link>Copy link →</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+{{end}}
+{{end}}

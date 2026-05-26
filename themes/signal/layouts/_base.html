@@ -1,0 +1,76 @@
+{{define "_base"}}<!doctype html>
+<html lang="{{.Site.Language}}" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{if .Title}}{{.Title}} · {{end}}{{.Site.Title}}</title>
+  {{if .Site.Description}}<meta name="description" content="{{.Site.Description}}">{{end}}
+  <link rel="alternate" type="application/rss+xml" title="{{.Site.Title}}" href="{{url "/rss.xml"}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{url "/style.css"}}">
+  <script>
+    // Signal is dark-first; only flip to light if the user explicitly set it.
+    (function(){
+      try {
+        var t = localStorage.getItem('ailog-theme');
+        var dark = t ? t !== 'light' : true;
+        document.documentElement.classList.toggle('dark', dark);
+        document.documentElement.classList.toggle('light', !dark);
+      } catch (e) {}
+    })();
+  </script>
+  <script src="{{url "/shared.js"}}" defer></script>
+  <script src="{{url "/theme.js"}}" defer></script>
+  {{block "head" .}}{{end}}
+</head>
+<body>
+  {{if eq .Page "post"}}<div class="progress"><i></i></div>{{end}}
+  <header class="site-header">
+    <div class="inner">
+      <a href="{{url "/"}}" class="brand">
+        <span class="dot"></span>
+        <span class="label">{{.Site.Title}}</span>
+        <span class="slash">/</span>
+        <span class="sub">notes</span>
+      </a>
+      <nav class="nav">
+        <a href="{{url "/"}}" class="{{if eq .Page "home"}}active{{end}}">~/index</a>
+        <a href="{{url "/tags/"}}" class="{{if or (eq .Page "tags") (eq .Page "tag")}}active{{end}}">~/topics</a>
+        <a href="{{url "/rss.xml"}}">~/feed.rss</a>
+      </nav>
+      <button class="search-trigger" type="button" data-search-trigger>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <span>Search posts &amp; tags</span>
+        <span class="kbd"><span>⌘</span><span>K</span></span>
+      </button>
+      <button class="theme-toggle" type="button" title="Toggle theme" aria-label="Toggle theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" data-icon="sun"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" data-icon="moon" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+  <main>{{block "main" .}}{{end}}</main>
+  <footer class="site-footer">
+    <div class="inner">
+      <div>
+        <div class="colophon">{{if .Site.Description}}{{.Site.Description}}{{else}}An independent journal on tools, software, and the businesses being built on top of both.{{end}}</div>
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <span style="width: 6px; height: 6px; border-radius: 3px; background: var(--signal); box-shadow: 0 0 8px var(--signal);"></span>
+          <span style="font-family: var(--mono); font-size: 11px; color: var(--muted);">signal · all systems online</span>
+        </div>
+      </div>
+      <div><h6>Read</h6><ul><li><a href="{{url "/"}}">~/index</a></li><li><a href="{{url "/tags/"}}">~/topics</a></li><li><a href="{{url "/rss.xml"}}">~/feed.rss</a></li></ul></div>
+      <div><h6>Author</h6><ul><li>{{.Site.Author}}</li></ul></div>
+      <div><h6>Colophon</h6><ul><li>Built with ailog</li><li>Space Grotesk · Newsreader</li><li>© {{year}}</li></ul></div>
+    </div>
+    <div class="copy">
+      <span>© {{year}} {{.Site.Author}}</span>
+      <span>last build {{(now).Format "2006-01-02"}}</span>
+    </div>
+  </footer>
+  <script id="search-data" type="application/json">{{.SearchIndex}}</script>
+</body>
+</html>
+{{end}}

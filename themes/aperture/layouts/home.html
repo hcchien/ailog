@@ -1,0 +1,64 @@
+{{define "head"}}{{end}}
+
+{{define "main"}}
+<div class="page">
+  <div class="container">
+    <section class="masthead">
+      <div class="issue">
+        <span>An independent journal</span>
+        <span>{{(now).Format "January 2006"}}</span>
+      </div>
+      <h1>{{.Site.Title}} — notes on <em>tools</em>, software, and the businesses being built on top.</h1>
+      <p class="tagline">{{if .Site.Description}}{{.Site.Description}}{{else}}Long-form essays from {{.Site.Author}}.{{end}} {{len .AllPosts}} {{if eq (len .AllPosts) 1}}post{{else}}posts{{end}}, {{len .Tags}} {{if eq (len .Tags) 1}}topic{{else}}topics{{end}}.</p>
+    </section>
+
+    {{if .Featured}}
+    {{with .Featured}}
+    <section class="feature">
+      <a href="{{url .URL}}" class="image">{{coverSVG (coverHue .) "cover / featured"}}</a>
+      <div class="meta">
+        <div class="eyebrow">Cover essay · {{shortDate .Date}}</div>
+        <h2><a href="{{url .URL}}">{{.Title}}</a></h2>
+        {{if .Description}}<p class="summary">{{.Description}}</p>{{end}}
+        <div class="byline">
+          <span>{{range $i, $t := .Tags}}{{if $i}} · {{end}}#{{$t}}{{end}}</span>
+          {{if .Tags}}<span class="dot"></span>{{end}}
+          <span>{{.ReadingMinutes}} min</span>
+        </div>
+      </div>
+    </section>
+    {{end}}
+    {{end}}
+
+    {{if .Tags}}
+    <div class="tag-filter">
+      {{range .Tags}}<a class="tag-chip" href="{{tagURL .Name}}">{{.Name}}<span class="count">·{{.Count}}</span></a>{{end}}
+    </div>
+    {{end}}
+
+    <div class="section-head">
+      <h3>Recent dispatches</h3>
+      <div class="count">{{len .Posts}} of {{len .AllPosts}}</div>
+    </div>
+
+    {{if .Posts}}
+    <div class="cards">
+      {{range .Posts}}
+      <article class="card">
+        <a class="image" href="{{url .URL}}" aria-label="{{.Title}}">{{coverSVG (coverHue .) .CoverLabel}}</a>
+        <div class="tag-list">
+          <span class="pri">#{{.FirstTag}}</span>
+          <span>{{shortDate .Date}}</span>
+        </div>
+        <h4><a href="{{url .URL}}">{{.Title}}</a></h4>
+        {{if .Description}}<p class="summary">{{.Description}}</p>{{end}}
+        <div class="reading">{{.ReadingMinutes}} min read</div>
+      </article>
+      {{end}}
+    </div>
+    {{else if not .Featured}}
+    <p style="color: var(--muted); font-style: italic;">沒有文章。試試 <code>ailog new "first post"</code> 或 <code>ailog admin</code>。</p>
+    {{end}}
+  </div>
+</div>
+{{end}}

@@ -14,12 +14,20 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type Cover struct {
+	Hue   int    `yaml:"hue"`
+	Label string `yaml:"label"`
+}
+
 type Frontmatter struct {
 	Title       string    `yaml:"title"`
 	Date        time.Time `yaml:"date"`
 	Tags        []string  `yaml:"tags"`
 	Description string    `yaml:"description"`
 	Draft       bool      `yaml:"draft"`
+	Feature     bool      `yaml:"feature"`
+	ReadingMin  int       `yaml:"readingMin"`
+	Cover       Cover     `yaml:"cover"`
 }
 
 type Post struct {
@@ -40,6 +48,56 @@ func (p *Post) DateString() string {
 		return ""
 	}
 	return p.Date.Format("2006-01-02")
+}
+
+// CoverHue returns the explicit hue (0..360) or one derived deterministically
+// from the slug — so every post gets a stable cover gradient.
+func (p *Post) CoverHue() int {
+	if p.Cover.Hue > 0 {
+		return p.Cover.Hue
+	}
+	h := 0
+	for _, r := range p.Slug {
+		h = (h*131 + int(r)) % 360
+	}
+	if h < 0 {
+		h += 360
+	}
+	// nudge into the teal/mint/blue band that all three themes assume
+	return 140 + (h % 80)
+}
+
+// CoverLabel is the small text overlay on the gradient cover.
+func (p *Post) CoverLabel() string {
+	if p.Cover.Label != "" {
+		return p.Cover.Label
+	}
+	return p.Slug
+}
+
+// ReadingMinutes returns the configured reading time or one derived from word
+// count (~220 wpm).
+func (p *Post) ReadingMinutes() int {
+	if p.ReadingMin > 0 {
+		return p.ReadingMin
+	}
+	words := len(strings.Fields(p.Body))
+	if words == 0 {
+		return 1
+	}
+	min := (words + 219) / 220
+	if min < 1 {
+		return 1
+	}
+	return min
+}
+
+// FirstTag returns the primary tag or "essay" as a fallback.
+func (p *Post) FirstTag() string {
+	if len(p.Tags) > 0 {
+		return p.Tags[0]
+	}
+	return "essay"
 }
 
 var frontmatterRe = regexp.MustCompile(`(?s)\A---\r?\n(.*?)\r?\n---\r?\n?`)

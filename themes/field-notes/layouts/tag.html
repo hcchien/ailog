@@ -1,0 +1,35 @@
+{{define "head"}}{{end}}
+
+{{define "main"}}
+<div class="page">
+  <div class="container">
+    <section class="masthead">
+      <h1>#<i>{{.Tag}}</i></h1>
+      <div class="side">
+        <div class="tagline">Everything filed under #{{.Tag}}, most recent first. <a href="{{url "/tags/"}}" style="color: var(--accent-strong);">← all topics</a></div>
+        <div class="meta">
+          <div>Entries<b>{{pad2 (len .Posts)}}</b></div>
+          <div>Topic<b>#{{.Tag}}</b></div>
+          <div>Latest<b>{{if .Posts}}{{with index .Posts 0}}{{formatDate .Date}}{{end}}{{else}}—{{end}}</b></div>
+        </div>
+      </div>
+    </section>
+    <ol class="index-list">
+      {{range $i, $p := .Posts}}
+      <li>
+        <div class="num">{{pad2 (add $i 1)}}<span class="month">{{formatDate $p.Date}}</span></div>
+        <div class="body">
+          <h4><a href="{{url $p.URL}}">{{$p.Title}}</a></h4>
+          {{if $p.Description}}<p class="summary">{{$p.Description}}</p>{{end}}
+        </div>
+        <div class="right">
+          <div class="tags">{{range $j, $t := $p.Tags}}{{if $j}} · {{end}}#{{$t}}{{end}}</div>
+          <div class="read">{{$p.ReadingMinutes}} min · essay</div>
+        </div>
+        <a href="{{url $p.URL}}" class="image">{{coverSVG (coverHue $p) (pad2 (add $i 1))}}</a>
+      </li>
+      {{end}}
+    </ol>
+  </div>
+</div>
+{{end}}

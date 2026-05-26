@@ -1,0 +1,51 @@
+{{define "_base"}}<!doctype html>
+<html lang="{{.Site.Language}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{if .Title}}{{.Title}} · {{end}}{{.Site.Title}}</title>
+  {{if .Site.Description}}<meta name="description" content="{{.Site.Description}}">{{end}}
+  <link rel="alternate" type="application/rss+xml" title="{{.Site.Title}}" href="{{url "/rss.xml"}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{url "/style.css"}}">
+  <script src="{{url "/shared.js"}}" defer></script>
+  <script src="{{url "/theme.js"}}" defer></script>
+  {{block "head" .}}{{end}}
+</head>
+<body>
+  {{if eq .Page "post"}}<div class="progress"><i></i></div>{{end}}
+  <header class="site-header">
+    <div class="inner">
+      <a href="{{url "/"}}" class="brand">
+        <span class="brand-mark"></span>
+        <span>{{.Site.Title}}<small>independent journal</small></span>
+      </a>
+      <nav class="nav">
+        <a href="{{url "/"}}" class="{{if eq .Page "home"}}active{{end}}">Index</a>
+        <a href="{{url "/tags/"}}" class="{{if or (eq .Page "tags") (eq .Page "tag")}}active{{end}}">Topics</a>
+        <a href="{{url "/rss.xml"}}">RSS</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn theme-toggle" type="button" title="Toggle theme" aria-label="Toggle theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" data-icon="moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" data-icon="sun" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+  <main>{{block "main" .}}{{end}}</main>
+  <footer class="site-footer">
+    <div class="inner">
+      <div class="colophon">An independent journal — {{if .Site.Description}}{{.Site.Description}}{{else}}notes and essays.{{end}}</div>
+      <ul>
+        <li><a href="{{url "/rss.xml"}}">RSS</a></li>
+        <li><a href="{{url "/tags/"}}">Topics</a></li>
+      </ul>
+      <div class="mono">© {{year}} · {{.Site.Author}} · Built with ailog</div>
+    </div>
+  </footer>
+</body>
+</html>
+{{end}}

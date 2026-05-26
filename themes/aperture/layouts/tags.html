@@ -1,0 +1,26 @@
+{{define "head"}}{{end}}
+
+{{define "main"}}
+<div class="page">
+  <div class="container">
+    <section class="masthead" style="padding-bottom: 16px;">
+      <div class="issue">
+        <span>Index · By topic</span>
+        <span>{{len .Tags}} {{if eq (len .Tags) 1}}topic{{else}}topics{{end}}</span>
+      </div>
+      <h1>Browse <em>by topic</em></h1>
+      <p class="tagline">Pick a thread to pull. The larger the chip, the more I've written under it.</p>
+    </section>
+    <div class="tags-grid">
+      {{range .Tags}}
+      <a href="{{tagURL .Name}}" class="{{if ge .Count 3}}big{{else if ge .Count 2}}mid{{end}}">
+        <span class="name">#{{.Name}}</span>
+        <span class="count">{{.Count}}</span>
+      </a>
+      {{else}}
+      <p style="color: var(--muted); font-style: italic;">沒有 tag。</p>
+      {{end}}
+    </div>
+  </div>
+</div>
+{{end}}

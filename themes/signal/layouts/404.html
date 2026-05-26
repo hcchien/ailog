@@ -1,0 +1,25 @@
+{{define "head"}}{{end}}
+
+{{define "main"}}
+<div class="page">
+  <div class="notfound">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="name">{{.Site.Title}}/router.go</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="prompt">$</span> ailog serve --resolve "/?"</div>
+        <div><span class="error">err: route not found</span></div>
+        <div class="num">404</div>
+        <h2>You hit a slug that doesn't exist.</h2>
+        <p>You followed a stale link or this essay was retired. The index has everything still standing.</p>
+        <div class="btn-row">
+          <a class="btn pri" href="{{url "/"}}">$ cd ~/index</a>
+          <a class="btn sec" href="{{url "/tags/"}}">$ cd ~/topics</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{end}}

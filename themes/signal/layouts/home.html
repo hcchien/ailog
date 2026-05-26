@@ -1,0 +1,77 @@
+{{define "head"}}{{end}}
+
+{{define "main"}}
+<div class="page">
+  <div class="container">
+    <section class="hero">
+      <div class="lead">
+        <div class="tagline">vol.03 · {{(now).Format "January 2006"}}</div>
+        <h1>Signal from <em>independent</em> dev research on tools, software &amp; the businesses being built on top.</h1>
+        <p>{{if .Site.Description}}{{.Site.Description}}{{else}}Long-form notes from {{.Site.Author}}. Sent irregularly, written carefully.{{end}}</p>
+        <div class="stats">
+          <div>POSTS<b>{{len .AllPosts}}</b></div>
+          <div>TOPICS<b>{{len .Tags}}</b></div>
+        </div>
+      </div>
+      {{if .Featured}}
+      {{with .Featured}}
+      <a href="{{url .URL}}" class="feature-card">
+        <div class="image">
+          {{coverSVG (coverHue .) "cover / featured"}}
+          <span class="pin">↑ now</span>
+        </div>
+        <div class="body">
+          <div class="meta">
+            <span class="tag">#{{.FirstTag}}</span>
+            <span>·</span>
+            <span>{{relTime .Date}}</span>
+            <span>·</span>
+            <span>{{.ReadingMinutes}} min</span>
+          </div>
+          <h2>{{.Title}}</h2>
+          {{if .Description}}<p>{{.Description}}</p>{{end}}
+          <span class="cta">Read essay <span>→</span></span>
+        </div>
+      </a>
+      {{end}}
+      {{end}}
+    </section>
+
+    <div class="controls">
+      <div class="section-title">
+        <span class="pri">$</span>
+        <span>posts list --recent</span>
+        <span class="count">{{len .Posts}} of {{len .AllPosts}}</span>
+      </div>
+      <div class="tag-rail">
+        {{range .Tags}}<a class="tag-chip" href="{{tagURL .Name}}">#{{.Name}}<span class="count">{{.Count}}</span></a>{{end}}
+      </div>
+    </div>
+
+    {{if .Posts}}
+    <div class="cards">
+      {{range .Posts}}
+      <article class="card">
+        <a href="{{url .URL}}" aria-label="{{.Title}}"><div class="image">{{coverSVG (coverHue .) .CoverLabel}}</div></a>
+        <div class="body">
+          <div class="meta">
+            <span class="tag">#{{.FirstTag}}</span>
+            <span>·</span>
+            <span>{{relTime .Date}}</span>
+          </div>
+          <h4><a href="{{url .URL}}">{{.Title}}</a></h4>
+          {{if .Description}}<p>{{.Description}}</p>{{end}}
+          <div class="foot">
+            <span>{{.ReadingMinutes}} min read</span>
+            <span>→</span>
+          </div>
+        </div>
+      </article>
+      {{end}}
+    </div>
+    {{else if not .Featured}}
+    <p style="padding: 32px 0; color: var(--ink-soft); font-style: italic;">沒有文章。試試 <code>ailog new "first post"</code> 或 <code>ailog admin</code>。</p>
+    {{end}}
+  </div>
+</div>
+{{end}}

@@ -1,0 +1,74 @@
+{{define "head"}}{{end}}
+
+{{define "main"}}
+<div class="page">
+  <div class="container">
+    <section class="masthead">
+      <h1>{{.Site.Title}} — field notes from the edges of software.</h1>
+      <div class="side">
+        <div class="tagline">{{if .Site.Description}}{{.Site.Description}}{{else}}A long-form journal on tools, teams and the next-decade software business by {{.Site.Author}}.{{end}}</div>
+        <div class="meta">
+          <div>Volume<b>03</b></div>
+          <div>Posts<b>{{len .AllPosts}}</b></div>
+          <div>Topics<b>{{len .Tags}}</b></div>
+        </div>
+      </div>
+    </section>
+
+    {{if .Featured}}
+    {{with .Featured}}
+    <section class="feature">
+      <div class="number">00<div class="number-sub">Cover essay</div></div>
+      <a href="{{url .URL}}" class="image">{{coverSVG (coverHue .) "cover / 00"}}</a>
+      <div class="meta">
+        <div class="eyebrow accent">Cover essay · {{.FirstTag}}</div>
+        <h2><a href="{{url .URL}}">{{.Title}}</a></h2>
+        {{if .Description}}<p class="summary">{{.Description}}</p>{{end}}
+        <div class="byline">
+          <span>{{formatDate .Date}}</span>
+          <span>{{.ReadingMinutes}} min</span>
+          <a href="{{url .URL}}">Read essay →</a>
+        </div>
+      </div>
+    </section>
+    {{end}}
+    {{end}}
+
+    <div class="section-title">
+      <div class="eyebrow strong">§ 01</div>
+      <h3>The index</h3>
+      <div class="count">{{len .Posts}} / {{len .AllPosts}} entries</div>
+    </div>
+
+    {{if .Tags}}
+    <div class="toolbar">
+      <div class="label">Topic</div>
+      <div class="tag-filter">
+        {{range .Tags}}<a class="tag-chip" href="{{tagURL .Name}}">#{{.Name}} {{.Count}}</a>{{end}}
+      </div>
+    </div>
+    {{end}}
+
+    {{if .Posts}}
+    <ol class="index-list">
+      {{range $i, $p := .Posts}}
+      <li>
+        <div class="num">{{pad2 (add $i 1)}}<span class="month">{{formatDate $p.Date}}</span></div>
+        <div class="body">
+          <h4><a href="{{url $p.URL}}">{{$p.Title}}</a></h4>
+          {{if $p.Description}}<p class="summary">{{$p.Description}}</p>{{end}}
+        </div>
+        <div class="right">
+          <div class="tags">{{range $j, $t := $p.Tags}}{{if $j}} · {{end}}#{{$t}}{{end}}</div>
+          <div class="read">{{$p.ReadingMinutes}} min · essay</div>
+        </div>
+        <a href="{{url $p.URL}}" class="image">{{coverSVG (coverHue $p) (pad2 (add $i 1))}}</a>
+      </li>
+      {{end}}
+    </ol>
+    {{else if not .Featured}}
+    <p style="padding: 32px 0; color: var(--ink-soft); font-style: italic;">沒有文章。試試 <code>ailog new "first post"</code> 或 <code>ailog admin</code>。</p>
+    {{end}}
+  </div>
+</div>
+{{end}}

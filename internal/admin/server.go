@@ -68,8 +68,8 @@ var adminFuncs = template.FuncMap{
 func loadAdminPage(site *config.Site, name string) (*template.Template, error) {
 	t := template.New("").Funcs(adminFuncs)
 	files := []string{
-		filepath.Join(site.ThemeDir(), "admin", "_base.html"),
-		filepath.Join(site.ThemeDir(), "admin", name+".html"),
+		filepath.Join(site.AdminThemeDir(), "admin", "_base.html"),
+		filepath.Join(site.AdminThemeDir(), "admin", name+".html"),
 	}
 	t, err := t.ParseFiles(files...)
 	if err != nil {

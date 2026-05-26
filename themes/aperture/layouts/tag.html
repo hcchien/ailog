@@ -1,0 +1,30 @@
+{{define "head"}}{{end}}
+
+{{define "main"}}
+<div class="page">
+  <div class="container">
+    <section class="masthead" style="padding-bottom: 24px;">
+      <div class="issue">
+        <a href="{{url "/tags/"}}" style="color: inherit;">← All topics</a>
+        <span>{{len .Posts}} {{if eq (len .Posts) 1}}entry{{else}}entries{{end}}</span>
+      </div>
+      <h1>#<em>{{.Tag}}</em></h1>
+      <p class="tagline">Everything filed under <code style="font-family: var(--mono); font-size: 14px;">#{{.Tag}}</code>, most recent first.</p>
+    </section>
+    <div class="cards">
+      {{range .Posts}}
+      <article class="card">
+        <a class="image" href="{{url .URL}}" aria-label="{{.Title}}">{{coverSVG (coverHue .) .CoverLabel}}</a>
+        <div class="tag-list">
+          <span class="pri">#{{.FirstTag}}</span>
+          <span>{{shortDate .Date}}</span>
+        </div>
+        <h4><a href="{{url .URL}}">{{.Title}}</a></h4>
+        {{if .Description}}<p class="summary">{{.Description}}</p>{{end}}
+        <div class="reading">{{.ReadingMinutes}} min read</div>
+      </article>
+      {{end}}
+    </div>
+  </div>
+</div>
+{{end}}

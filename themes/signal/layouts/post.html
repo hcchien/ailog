@@ -1,0 +1,77 @@
+{{define "head"}}
+{{with .Post}}{{if .Description}}<meta property="og:description" content="{{.Description}}">{{end}}{{end}}
+{{end}}
+
+{{define "main"}}
+{{with .Post}}
+<div class="page">
+  <div class="container">
+    <div class="post-layout">
+      <aside class="toc" data-toc>
+        <div class="head">// contents</div>
+        <ol></ol>
+      </aside>
+
+      <article>
+        <header class="article-head">
+          <div class="crumb">
+            <a href="{{url "/"}}">~/index</a><span class="sep">/</span>
+            <a href="{{tagURL .FirstTag}}">#{{.FirstTag}}</a><span class="sep">/</span>
+            <span>{{.Slug}}</span>
+          </div>
+          <h1>{{.Title}}</h1>
+          {{if .Description}}<p class="dek">{{.Description}}</p>{{end}}
+          <div class="meta-row">
+            <span class="author">{{$.Site.Author}}</span>
+            <span class="dot"></span>
+            <span>{{longDate .Date}}</span>
+            <span class="dot"></span>
+            <span>{{.ReadingMinutes}} min read</span>
+            <span class="dot"></span>
+            <span>{{range $i, $t := .Tags}}{{if $i}} {{end}}#{{$t}}{{end}}</span>
+          </div>
+        </header>
+
+        <div class="post-body" data-post-body>{{.HTML}}</div>
+
+        <div class="prev-next">
+          {{if $.Prev}}
+            <a href="{{url $.Prev.URL}}" class="prev">
+              <div class="label">← Previous</div>
+              <div class="title">{{$.Prev.Title}}</div>
+            </a>
+          {{else}}<div></div>{{end}}
+          {{if $.Next}}
+            <a href="{{url $.Next.URL}}" class="next">
+              <div class="label">Next →</div>
+              <div class="title">{{$.Next.Title}}</div>
+            </a>
+          {{else}}<div></div>{{end}}
+        </div>
+      </article>
+
+      <aside class="meta">
+        <div class="block">
+          <h6>Published</h6>
+          <div class="val">{{isoDate .Date}}</div>
+        </div>
+        <div class="block">
+          <h6>Reading time</h6>
+          <div class="val">{{.ReadingMinutes}} min</div>
+        </div>
+        <div class="block">
+          <h6>Tags</h6>
+          <div>{{range .Tags}}<a class="tag-chip" href="{{tagURL .}}">#{{.}}</a>{{end}}</div>
+        </div>
+        <div class="block">
+          <h6>Share</h6>
+          <div class="share-row">
+            <button class="icon-btn" type="button" data-copy-link title="Copy link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+{{end}}
+{{end}}
