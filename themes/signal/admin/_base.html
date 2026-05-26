@@ -1,0 +1,47 @@
+{{define "_base"}}<!doctype html>
+<html lang="zh-Hant" class="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{if .Title}}{{.Title}} · {{end}}ailog admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/theme/style.css">
+  <script>
+    (function(){
+      try {
+        var t = localStorage.getItem('ailog-theme');
+        var dark = t ? t !== 'light' : true;
+        document.documentElement.classList.toggle('dark', dark);
+        document.documentElement.classList.toggle('light', !dark);
+      } catch (e) {}
+    })();
+  </script>
+  <script src="/theme/admin.js" defer></script>
+</head>
+<body>
+  <div class="admin-shell">
+    <div class="admin-bar">
+      <div class="inner">
+        <span style="font-family: var(--mono); font-weight: 500;">
+          <span style="color: var(--accent);">●</span> {{.Site.Title}} <span style="color: var(--muted);">/ admin</span>
+        </span>
+        <span class="pill">draft mode · 127.0.0.1</span>
+        <nav>
+          <a href="/admin" class="{{if eq .Active "list"}}active{{end}}">~/posts</a>
+          <a href="/admin/new" class="{{if eq .Active "edit"}}active{{end}}">~/new</a>
+          <a href="{{.Site.BaseURL}}{{.Site.BasePath}}/" target="_blank" rel="noopener">~/view ↗</a>
+          {{if .User}}
+          <form method="post" action="/admin/logout" style="display:inline">
+            <button type="submit" style="background:none; border:none; color: var(--warn); cursor: pointer; font: inherit; padding: 5px 10px;">~/logout</button>
+          </form>
+          {{end}}
+        </nav>
+      </div>
+    </div>
+    {{block "main" .}}{{end}}
+  </div>
+</body>
+</html>
+{{end}}

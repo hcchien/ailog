@@ -1,0 +1,32 @@
+{{define "main"}}
+<div class="admin-page">
+  <header>
+    <h2>Posts</h2>
+    <a href="/admin/new" class="btn-primary">+ New post</a>
+  </header>
+  <ul class="admin-list">
+    {{range .Posts}}
+    <li>
+      <div class="date">{{formatDate .Date}}</div>
+      <div class="title">
+        <a href="/admin/edit?slug={{.Slug}}">{{if .Title}}{{.Title}}{{else}}<em>(untitled)</em>{{end}}</a>
+        {{if .Draft}}<span class="draft-pill">Draft</span>{{end}}
+      </div>
+      <div class="tags">{{range $i, $t := .Tags}}{{if $i}} {{end}}#{{$t}}{{end}}</div>
+      <div class="actions">
+        <a href="/posts/{{.Slug}}/" target="_blank">View</a>
+        <a href="/admin/edit?slug={{.Slug}}">Edit</a>
+        <form method="post" action="/admin/delete" onsubmit="return confirm('Delete this post?');" style="margin:0; display:inline;">
+          <input type="hidden" name="slug" value="{{.Slug}}">
+          <button type="submit" class="danger" style="background:none; border:1px solid var(--rule-soft); font: inherit; cursor: pointer; padding: 6px 10px; color: var(--ink-soft); font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;">Del</button>
+        </form>
+      </div>
+    </li>
+    {{else}}
+    <li style="grid-template-columns: 1fr; color: var(--ink-soft); font-style: italic; padding: 32px 0;">
+      還沒有文章 — 點上面的 <strong>+ New post</strong> 開始寫第一篇。
+    </li>
+    {{end}}
+  </ul>
+</div>
+{{end}}

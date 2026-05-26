@@ -74,6 +74,7 @@ img, svg { display: block; max-width: 100%; }
 }
 .brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 600; font-size: 22px; letter-spacing: -0.02em; font-variation-settings: 'opsz' 60; }
 .brand-mark { width: 28px; height: 28px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, var(--accent), color-mix(in oklab, var(--accent) 30%, var(--ink))); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--accent) 60%, black); }
+.brand-mark.small { width: 22px; height: 22px; }
 .brand small { display: block; font-family: var(--mono); font-size: 10px; font-weight: 400; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 1px; }
 .nav { display: flex; gap: 28px; justify-content: center; font-size: 14px; }
 .nav a { color: var(--ink-soft); position: relative; padding: 4px 0; transition: color 0.15s; }

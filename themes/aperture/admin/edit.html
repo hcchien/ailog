@@ -1,0 +1,83 @@
+{{define "main"}}
+<div class="admin-page">
+  <form method="post" action="/admin/save" id="editor-form" enctype="application/x-www-form-urlencoded">
+    <input type="hidden" name="original_slug" value="{{.Post.Slug}}">
+
+    <div class="editor-shell">
+      <div class="editor-main">
+        <div class="editor-title">
+          <input type="text" name="title" value="{{.Post.Title}}" required autocomplete="off" placeholder="An essay needs a title…">
+        </div>
+        <input type="text" name="description" value="{{.Post.Description}}" placeholder="Description / dek (one sentence for index &amp; RSS)">
+
+        <div class="editor-meta">
+          <label>Slug<input type="text" name="slug" value="{{.Post.Slug}}" autocomplete="off" placeholder="{{if .IsNew}}auto-from-title{{end}}" pattern="[a-z0-9-]*"></label>
+          <label>Date<input type="datetime-local" name="date" value="{{.Post.Date.Format "2006-01-02T15:04"}}"></label>
+        </div>
+        <label>Tags<small style="color: var(--muted); font-weight: 400;">comma-separated</small>
+          <input type="text" name="tags" value="{{.TagsCSV}}" list="all-tags" autocomplete="off" placeholder="AI, startups, …">
+          <datalist id="all-tags">
+            {{range .AllTags}}<option value="{{.}}">{{end}}
+          </datalist>
+        </label>
+
+        <div class="editor-tabs" data-tabs>
+          <button type="button" class="active" data-tab="write">Write</button>
+          <button type="button" data-tab="preview">Preview</button>
+          <button type="button" data-tab="split">Split</button>
+        </div>
+        <div class="editor-body" data-editor-body>
+          <textarea name="body" data-editor-textarea placeholder="# Write in Markdown…">{{.Post.Body}}</textarea>
+          <div class="preview-pane post-body" data-editor-preview style="display:none;"><em style="color: var(--muted);">Preview will render here.</em></div>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 16px;">
+          <input type="file" id="image-upload" accept="image/*" style="display:none;">
+          <button type="button" class="btn-secondary" data-upload-btn>+ Upload image</button>
+          <span style="flex: 1;"></span>
+        </div>
+      </div>
+
+      <aside class="editor-side">
+        <div class="card">
+          <h6>Status</h6>
+          <label class="checkbox" style="padding: 6px 0;">
+            <input type="checkbox" name="draft" {{if .Post.Draft}}checked{{end}}>
+            Draft (don't publish)
+          </label>
+          <label class="checkbox" style="padding: 6px 0;">
+            <input type="checkbox" name="feature" {{if .Post.Feature}}checked{{end}}>
+            Feature on home
+          </label>
+          <div class="row"><span style="color: var(--muted);">Auto-push</span><span style="font-family: var(--mono); font-size: 12px; color: {{if .Site.Admin.AutoPush}}var(--accent-ink){{else}}var(--muted){{end}};">{{if .Site.Admin.AutoPush}}enabled{{else}}disabled{{end}}</span></div>
+          <div class="actions" style="margin-top: 14px;">
+            <button type="submit" class="btn-primary" style="flex: 1; justify-content: center;">Save{{if .Site.Admin.AutoPush}} &amp; push{{end}}</button>
+            <a href="/admin" class="btn-secondary">Cancel</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <h6>SEO Preview</h6>
+          <div style="font-family: var(--display); font-size: 17px; font-weight: 500; line-height: 1.25; margin-bottom: 6px;" data-seo-title>{{if .Post.Title}}{{.Post.Title}}{{else}}Untitled essay{{end}}</div>
+          <div style="font-size: 12px; color: var(--accent-ink); font-family: var(--mono); margin-bottom: 4px;" data-seo-url>{{.Site.BaseURL}}{{.Site.BasePath}}/posts/{{if .Post.Slug}}{{.Post.Slug}}{{else}}slug{{end}}/</div>
+          <div style="font-size: 13px; color: var(--ink-soft); line-height: 1.4;" data-seo-desc>{{if .Post.Description}}{{.Post.Description}}{{else}}Add a description to control the SEO snippet.{{end}}</div>
+        </div>
+
+        <div class="card">
+          <h6>Word stats</h6>
+          <div class="row"><span style="color: var(--muted);">Words</span><span style="font-family: var(--mono);" data-stat-words>0</span></div>
+          <div class="row"><span style="color: var(--muted);">Reading</span><span style="font-family: var(--mono);" data-stat-reading>1 min</span></div>
+          {{if not .IsNew}}
+          <div class="actions" style="margin-top: 14px;">
+            <button type="button" class="btn-secondary btn-danger" data-delete-btn style="flex: 1; justify-content: center;">Delete post</button>
+          </div>
+          <form id="delete-form" method="post" action="/admin/delete" style="display:none;">
+            <input type="hidden" name="slug" value="{{.Post.Slug}}">
+          </form>
+          {{end}}
+        </div>
+      </aside>
+    </div>
+  </form>
+</div>
+{{end}}

@@ -1,0 +1,38 @@
+{{define "_base"}}<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{if .Title}}{{.Title}} · {{end}}ailog admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/theme/style.css">
+  <script src="/theme/admin.js" defer></script>
+</head>
+<body>
+  <div class="admin-shell">
+    <div class="admin-bar">
+      <div class="inner">
+        <a href="/admin" class="brand" style="font-size: 18px;">
+          <span class="brand-mark small"></span>
+          <span>{{.Site.Title}}<small>admin · 127.0.0.1</small></span>
+        </a>
+        <span class="pill">draft mode</span>
+        <nav>
+          <a href="/admin" class="{{if eq .Active "list"}}active{{end}}">Posts</a>
+          <a href="/admin/new" class="{{if eq .Active "edit"}}active{{end}}">New</a>
+          <a href="{{.Site.BaseURL}}{{.Site.BasePath}}/" target="_blank" rel="noopener">View site ↗</a>
+          {{if .User}}
+          <form method="post" action="/admin/logout" style="display:inline">
+            <button type="submit" style="background:none; border:none; color: inherit; cursor: pointer; font: inherit;">Logout</button>
+          </form>
+          {{end}}
+        </nav>
+      </div>
+    </div>
+    {{block "main" .}}{{end}}
+  </div>
+</body>
+</html>
+{{end}}

@@ -36,6 +36,11 @@ func (s *Server) routes(mux *http.ServeMux) {
 	// Serve uploaded images from public/ so the editor preview can resolve them.
 	publicFS := http.FileServer(http.Dir(s.site.PublicDir()))
 	mux.Handle("/images/", publicFS)
+
+	// Serve the active theme's static/ directory at /theme/* so admin
+	// templates can pull in the same CSS the public site uses.
+	themeStatic := http.FileServer(http.Dir(filepath.Join(s.site.ThemeDir(), "static")))
+	mux.Handle("/theme/", http.StripPrefix("/theme/", themeStatic))
 }
 
 // requireAuth blocks unauthenticated requests with 401 (used for non-page endpoints).
@@ -134,10 +139,11 @@ func (s *Server) handleList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	data := map[string]any{
-		"Site":  s.site,
-		"Title": "Posts",
-		"User":  s.session(r).User,
-		"Posts": posts,
+		"Site":   s.site,
+		"Title":  "Posts",
+		"User":   s.session(r).User,
+		"Active": "list",
+		"Posts":  posts,
 	}
 	if err := t.ExecuteTemplate(w, "_base", data); err != nil {
 		log.Printf("render list: %v", err)
@@ -197,6 +203,7 @@ func (s *Server) renderEdit(w http.ResponseWriter, r *http.Request, p *content.P
 		"Site":    s.site,
 		"Title":   firstNonEmpty(p.Title, "New post"),
 		"User":    s.session(r).User,
+		"Active":  "edit",
 		"Post":    p,
 		"AllTags": allTags,
 		"TagsCSV": strings.Join(p.Tags, ", "),
@@ -233,6 +240,7 @@ func (s *Server) handleSave(w http.ResponseWriter, r *http.Request) {
 	tagsCSV := r.FormValue("tags")
 	desc := strings.TrimSpace(r.FormValue("description"))
 	draft := r.FormValue("draft") == "on"
+	feature := r.FormValue("feature") == "on"
 	body := r.FormValue("body")
 	slug := strings.TrimSpace(r.FormValue("slug"))
 	originalSlug := strings.TrimSpace(r.FormValue("original_slug"))
@@ -256,6 +264,7 @@ func (s *Server) handleSave(w http.ResponseWriter, r *http.Request) {
 		Tags:        parseTagsCSV(tagsCSV),
 		Description: desc,
 		Draft:       draft,
+		Feature:     feature,
 	}
 	out, err := content.Serialize(fm, body)
 	if err != nil {

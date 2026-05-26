@@ -1,0 +1,35 @@
+{{define "main"}}
+<div class="admin-page">
+  <header>
+    <div>
+      <h2>Posts</h2>
+      <div class="sub">{{len .Posts}} total · content/posts/</div>
+    </div>
+    <a href="/admin/new" class="btn-primary">$ new post</a>
+  </header>
+  <ul class="admin-list">
+    {{range .Posts}}
+    <li>
+      <div class="date">{{formatDate .Date}}</div>
+      <div class="title">
+        <a href="/admin/edit?slug={{.Slug}}">{{if .Title}}{{.Title}}{{else}}<em>(untitled)</em>{{end}}</a>
+        {{if .Draft}}<span class="draft-pill">draft</span>{{end}}
+      </div>
+      <div class="tags">{{range $i, $t := .Tags}}{{if $i}} {{end}}#{{$t}}{{end}}</div>
+      <div class="actions">
+        <a href="/posts/{{.Slug}}/" target="_blank">view</a>
+        <a href="/admin/edit?slug={{.Slug}}">edit</a>
+        <form method="post" action="/admin/delete" onsubmit="return confirm('Delete this post?');" style="margin:0; display:inline;">
+          <input type="hidden" name="slug" value="{{.Slug}}">
+          <button type="submit" class="danger" style="background:none; border:none; font: inherit; cursor: pointer; padding: 6px 10px; color: var(--ink-soft); border-radius: 5px;">del</button>
+        </form>
+      </div>
+    </li>
+    {{else}}
+    <li style="grid-template-columns: 1fr; color: var(--muted); font-style: italic; padding: 32px 20px;">
+      No posts yet — try <code style="font-family: var(--mono);">$ new post</code> above.
+    </li>
+    {{end}}
+  </ul>
+</div>
+{{end}}
