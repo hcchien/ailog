@@ -92,20 +92,21 @@ func Run(site *config.Site) error {
 	return nil
 }
 
-var funcMap = template.FuncMap{
-	"formatDate": func(t time.Time) string {
-		if t.IsZero() {
-			return ""
-		}
-		return t.Format("2006-01-02")
-	},
-	"year": func() int { return time.Now().Year() },
-}
-
 // loadPageTemplate parses _base.html + the named page layout in a fresh
 // template namespace, so {{define "main"}} / {{define "head"}} from other
 // pages can't bleed into this one.
 func loadPageTemplate(site *config.Site, name string) (*template.Template, error) {
+	funcMap := template.FuncMap{
+		"formatDate": func(t time.Time) string {
+			if t.IsZero() {
+				return ""
+			}
+			return t.Format("2006-01-02")
+		},
+		"year": func() int { return time.Now().Year() },
+		// {{url "/style.css"}} → "/ailog/style.css" under a basePath.
+		"url": site.URL,
+	}
 	t := template.New("").Funcs(funcMap)
 	files := []string{
 		filepath.Join(site.ThemeDir(), "layouts", "_base.html"),
@@ -184,7 +185,7 @@ func renderPage(site *config.Site, name string, data pageData, outPath string) e
 func renderRSS(site *config.Site, posts []*content.Post, dist string) error {
 	feed := &feeds.Feed{
 		Title:       site.Title,
-		Link:        &feeds.Link{Href: site.BaseURL},
+		Link:        &feeds.Link{Href: site.AbsURL("/")},
 		Description: site.Description,
 		Author:      &feeds.Author{Name: site.Author},
 		Created:     time.Now(),
@@ -192,7 +193,7 @@ func renderRSS(site *config.Site, posts []*content.Post, dist string) error {
 	for _, p := range posts {
 		feed.Items = append(feed.Items, &feeds.Item{
 			Title:       p.Title,
-			Link:        &feeds.Link{Href: strings.TrimRight(site.BaseURL, "/") + p.URL()},
+			Link:        &feeds.Link{Href: site.AbsURL(p.URL())},
 			Description: p.Description,
 			Content:     string(p.HTML),
 			Created:     p.Date,

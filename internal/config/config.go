@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -21,6 +22,7 @@ type Site struct {
 	Description  string      `yaml:"description"`
 	Author       string      `yaml:"author"`
 	BaseURL      string      `yaml:"baseURL"`
+	BasePath     string      `yaml:"basePath"`
 	Language     string      `yaml:"language"`
 	CustomDomain string      `yaml:"customDomain"`
 	PostsPerPage int         `yaml:"postsPerPage"`
@@ -48,6 +50,14 @@ func Load(path string) (*Site, error) {
 }
 
 func (s *Site) applyDefaults() {
+	// Normalize BasePath: "" means root. Otherwise ensure leading slash, no trailing.
+	bp := strings.TrimSpace(s.BasePath)
+	bp = strings.TrimRight(bp, "/")
+	if bp != "" && !strings.HasPrefix(bp, "/") {
+		bp = "/" + bp
+	}
+	s.BasePath = bp
+
 	if s.Language == "" {
 		s.Language = "zh-Hant"
 	}
@@ -63,6 +73,29 @@ func (s *Site) applyDefaults() {
 	if s.Admin.UploadsDir == "" {
 		s.Admin.UploadsDir = "public/images"
 	}
+}
+
+// URL prefixes an absolute site path with BasePath. Pass-through for full URLs.
+//
+//	URL("/style.css")  → "/ailog/style.css"   (basePath = /ailog)
+//	URL("/style.css")  → "/style.css"         (basePath = "")
+//	URL("https://x/y") → "https://x/y"
+func (s *Site) URL(p string) string {
+	if p == "" {
+		return s.BasePath + "/"
+	}
+	if strings.HasPrefix(p, "http://") || strings.HasPrefix(p, "https://") {
+		return p
+	}
+	if !strings.HasPrefix(p, "/") {
+		p = "/" + p
+	}
+	return s.BasePath + p
+}
+
+// AbsURL is URL with BaseURL prefixed. Used for RSS and meta tags.
+func (s *Site) AbsURL(p string) string {
+	return strings.TrimRight(s.BaseURL, "/") + s.URL(p)
 }
 
 func (s *Site) PostsDir() string   { return filepath.Join(s.Root, s.Admin.PostsDir) }

@@ -7,12 +7,12 @@
 <ul class="post-list">
   {{range .Posts}}
   <li>
-    <a class="post-link" href="{{.URL}}">
+    <a class="post-link" href="{{url .URL}}">
       <span class="post-date">{{formatDate .Date}}</span>
       <span class="post-title">{{.Title}}</span>
     </a>
   </li>
   {{end}}
 </ul>
-<p class="back"><a href="/tags/">← all tags</a></p>
+<p class="back"><a href="{{url "/tags/"}}">← all tags</a></p>
 {{end}}

@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{{if .Title}}{{.Title}} · {{end}}{{.Site.Title}}</title>
   {{if .Site.Description}}<meta name="description" content="{{.Site.Description}}">{{end}}
-  <link rel="alternate" type="application/rss+xml" title="{{.Site.Title}}" href="/rss.xml">
-  <link rel="stylesheet" href="/style.css">
+  <link rel="alternate" type="application/rss+xml" title="{{.Site.Title}}" href="{{url "/rss.xml"}}">
+  <link rel="stylesheet" href="{{url "/style.css"}}">
   {{block "head" .}}{{end}}
 </head>
 <body>
   <header class="site-header">
-    <a class="site-title" href="/">{{.Site.Title}}</a>
+    <a class="site-title" href="{{url "/"}}">{{.Site.Title}}</a>
     <nav>
-      <a href="/">home</a>
-      <a href="/tags/">tags</a>
-      <a href="/rss.xml">rss</a>
+      <a href="{{url "/"}}">home</a>
+      <a href="{{url "/tags/"}}">tags</a>
+      <a href="{{url "/rss.xml"}}">rss</a>
     </nav>
   </header>
   <main>

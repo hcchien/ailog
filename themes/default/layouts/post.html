@@ -13,7 +13,7 @@
       <time datetime="{{formatDate .Date}}">{{formatDate .Date}}</time>
       {{if .Tags}}
       · <span class="post-tags">
-        {{range .Tags}}<a href="/tags/{{.}}/">#{{.}}</a> {{end}}
+        {{range .Tags}}<a href="{{url (printf "/tags/%s/" .)}}">#{{.}}</a> {{end}}
       </span>
       {{end}}
     </p>
@@ -22,6 +22,6 @@
     {{.HTML}}
   </div>
 </article>
-<p class="back"><a href="/">← back</a></p>
+<p class="back"><a href="{{url "/"}}">← back</a></p>
 {{end}}
 {{end}}

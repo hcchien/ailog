@@ -1,11 +1,18 @@
 title: ailog
 description: A lightweight blog
 author: hcchien
-baseURL: https://example.com
+baseURL: https://hcchien.github.io
 language: zh-Hant
+
+# Sub-path the site is served from. Leave blank for root.
+# - GitHub Pages project site (hcchien.github.io/ailog/) → basePath: /ailog
+# - User site (hcchien.github.io/) or custom domain at root → basePath: ""
+basePath: /ailog
 
 # Custom domain for GitHub Pages (leave blank for *.github.io)
 # When set, a CNAME file is written into dist/ at build time.
+# Setting this usually means basePath should be "" and baseURL should be the
+# domain.
 customDomain: ""
 
 # Admin server settings (used by `ailog admin`)

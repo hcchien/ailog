@@ -39,9 +39,18 @@ func Run(site *config.Site, addr string) error {
 
 	fs := http.FileServer(http.Dir(site.DistDir()))
 	mux := http.NewServeMux()
-	mux.Handle("/", noCache(notFoundHandler(site, fs)))
+	handler := noCache(notFoundHandler(site, fs))
+	prefix := site.BasePath
+	if prefix == "" {
+		mux.Handle("/", handler)
+	} else {
+		mux.Handle(prefix+"/", http.StripPrefix(prefix, handler))
+		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, prefix+"/", http.StatusFound)
+		})
+	}
 
-	log.Printf("ailog serve → http://%s (root %s)", addr, site.DistDir())
+	log.Printf("ailog serve → http://%s%s/ (root %s)", addr, prefix, site.DistDir())
 	return http.ListenAndServe(addr, mux)
 }
 

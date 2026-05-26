@@ -6,7 +6,7 @@
 <h1>Tags</h1>
 <ul class="tag-cloud">
   {{range .Tags}}
-  <li><a href="/tags/{{.Name}}/">#{{.Name}}</a> <span class="tag-count">{{.Count}}</span></li>
+  <li><a href="{{url (printf "/tags/%s/" .Name)}}">#{{.Name}}</a> <span class="tag-count">{{.Count}}</span></li>
   {{else}}
   <li class="empty">沒有 tag。</li>
   {{end}}

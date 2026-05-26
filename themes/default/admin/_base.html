@@ -42,7 +42,7 @@
       {{if .User}}
       <a href="/admin">posts</a>
       <a href="/admin/new">new</a>
-      <a href="/" target="_blank">view site ↗</a>
+      <a href="{{.Site.BaseURL}}{{.Site.BasePath}}/" target="_blank" rel="noopener">view site ↗</a>
       <form method="post" action="/admin/logout" style="display:inline; margin-left:1rem;">
         <button class="secondary outline" type="submit" style="padding: 0.15rem 0.65rem; font-size: 0.8rem;">logout ({{.User.Login}})</button>
       </form>
